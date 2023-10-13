@@ -8,10 +8,11 @@ import GlobalContext from './context/GlobalContext.jsx'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  // <React.StrictMode>
+  <React.StrictMode>
     <GlobalContext>
        <App/>
     </GlobalContext>   
+    </React.StrictMode>
   ,
 )
 

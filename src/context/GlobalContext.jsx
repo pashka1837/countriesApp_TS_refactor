@@ -25,7 +25,7 @@ export default function GlobalContext({children}) {
     }
 
   return (
-    <ThemeContext.Provider value={{changeAppTheme}}>
+    <ThemeContext.Provider value={{changeAppTheme, isDarkTheme}}>
         {children}
     </ThemeContext.Provider >
   )
