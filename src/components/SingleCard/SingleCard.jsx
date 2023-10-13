@@ -1,13 +1,20 @@
 import { IonCard, IonCardContent } from '@ionic/react';
 import './SingleCard.css';
-import { useNavigate } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 
 export default function SingleCard({
-  capital, flags, name, population, region,
+  capital, flags, name, population, region, srchPrms,
 }) {
   const navigate = useNavigate();
+
   function handleClick() {
-    navigate(`/country/:${name.common}`);
+    // const searchParams = new URLSearchParams();
+    // console.log(Object.entries(srchPrms));
+    // searchParams.append('search', '1');
+    // searchParams.append('search2', '2');
+    // const res = new Response(searchParams);
+    // return redirect('/some');
+    navigate(`/country/${name.common}`, { state: srchPrms });
   }
 
   return (
@@ -32,9 +39,7 @@ export default function SingleCard({
             <span>{capital?.[0]}</span>
           </h5>
         </div>
-
       </IonCardContent>
-
     </IonCard>
   );
 }

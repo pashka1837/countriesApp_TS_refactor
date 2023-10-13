@@ -3,6 +3,7 @@ import CardList from '../../components/CardList/CardList';
 import SearchForm from '../../components/SearchForm/SearchForm';
 import { customAxios } from '../../axios/customAxios';
 import './Landing.css';
+import { useState } from 'react';
 
 function fetchData(region) {
   return {
@@ -25,12 +26,12 @@ export function loader(queryClient) {
 }
 
 export default function Landing() {
+  const [srchPrms, setSrchPrms] = useState({ name: '', region: '' });
   const { data } = useQuery(fetchData());
-  console.log(data);
   return (
     <div style={{ marginTop: '10vh' }}>
       <SearchForm />
-      <CardList data={data} />
+      <CardList data={data} srchPrms={srchPrms} />
     </div>
   );
 }

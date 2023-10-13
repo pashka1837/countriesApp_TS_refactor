@@ -1,0 +1,52 @@
+.country-container {
+  margin-top: 10vh;
+  padding: 0 8%;
+  display: grid;
+  height: 100%;
+  align-content: center;
+  height: 90vh;
+  color: var(--text-color);
+}
+
+.inner-country-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
+  align-items: center;
+}
+
+.country-flag {
+  height: 400px;
+  width: 560px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.country {
+  padding: 3% 0;
+  height: 100%;
+  display: grid;
+  align-content: center;
+}
+
+.country-desc {
+  padding: 10% 0;
+  display: grid;
+  row-gap: 20px;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 60px;
+}
+.country-desc div {
+  display: grid;
+  grid-template-rows: repeat(5, 1fr);
+  row-gap: 10px;
+}
+
+.inner-country-container span {
+  font-weight: 300;
+}
+
+.inner-country-container h5 {
+  font-size: 1em;
+  font-weight: 600;
+}
