@@ -1,0 +1,80 @@
+:root {
+  --heigth-srch-field: 56px;
+}
+
+.search-container {
+  padding: 5%;
+  color: var(--text-color);
+}
+
+.search-from {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+}
+
+.search-field {
+  display: grid;
+  align-items: center;
+  width: 480px;
+  height: var(--heigth-srch-field);
+  grid-template-columns: 1fr 10fr;
+  column-gap: 5px;
+  /* justify-content: center; */
+  justify-items: end;
+  background-color: var(--BG-cards);
+  border-radius: 5px;
+}
+
+.search-field input {
+  border: none;
+  outline: none;
+  background-color: var(--BG-cards);
+  justify-self: start;
+  width: 100%;
+  color: var(--text-color);
+  font-size: 0.875em;
+}
+
+.filter-field {
+  width: 200px;
+  height: var(--heigth-srch-field);
+  padding: 0 6%;
+  position: relative;
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--BG-cards);
+  color: var(--text-color);
+  border-radius: 5px;
+  cursor: pointer;
+}
+/* .filter-field button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-color);
+} */
+
+.filter-popUp {
+  display: none;
+  gap: 5px;
+  background-color: var(--BG-cards);
+  position: absolute;
+  top: calc(var(--heigth-srch-field) + 5px);
+  border-radius: 5px;
+  left: 0;
+  width: 200px;
+  padding: 6%;
+  z-index: 1;
+}
+
+.filter-popUp.active {
+  display: grid;
+  transition: all 0.5s;
+}
+
+.filter-popUp p {
+  cursor: pointer;
+}

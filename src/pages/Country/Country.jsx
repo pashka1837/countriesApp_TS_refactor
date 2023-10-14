@@ -1,6 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { useLoaderData, useLocation } from 'react-router-dom';
+import {
+  redirect, useLoaderData, useLocation, useNavigate, useSubmit,
+} from 'react-router-dom';
+import { BiArrowBack } from 'react-icons/bi';
 import { customAxios } from '../../axios/customAxios';
+
 import './Country.css';
 
 function fetchData(name) {
@@ -40,30 +44,36 @@ export default function Country() {
   const { name } = useLoaderData();
   const { data } = useQuery(fetchData(name));
   const { state: srchPrms } = useLocation();
-  console.log(data);
+  const submit = useSubmit();
   const {
     area, borders, capital,
     currencies: currencyOfCountry, flags, languages: languageOfCountry,
     name: nameOfCountry, population,
     region, subregion, tld,
-  } = data[0];
+  } = data[1] ?? data[0];
 
   const nativeName = getValues(nameOfCountry?.nativeName) || nameOfCountry.common;
   const currencies = getValues(currencyOfCountry) || 'uknown';
   const languages = getValues(languageOfCountry) || 'uknown';
-  const borderCountries = borders.length ? borders.join(', ') : 'uknown';
-  // const nativeNameKeys = Object.keys(nameOfCountry?.nativeName);
-  // const nativeName = nativeNameKeys.length ? nameOfCountry.nativeName[`${nativeNameKeys[0]}`].official : nameOfCountry.common;
-  // const languageKeys = Object.keys(languageOfCountry);
-  // console.log(Object.values(languageOfCountry));
-  // console.log('objnames', nativeNameKeys);
+
+  function handleBackButton() {
+    const searchParams = new URLSearchParams();
+    searchParams.append('search', srchPrms);
+    submit(searchParams, { method: 'get', action: '/' });
+  }
+
   return (
     <div className="country-container">
-      <button type="button">back</button>
+      <button onClick={handleBackButton} className="country-back-btn" type="button">
+        <BiArrowBack />
+        {'  '}
+        Back
+      </button>
       <div className="inner-country-container">
         <img className="country-flag" src={flags?.svg} alt={nameOfCountry?.common} />
         <div className="country">
           <h1>{nameOfCountry?.official || nameOfCountry?.common}</h1>
+
           <div className="country-desc">
             <div>
               <h5>
@@ -96,6 +106,7 @@ export default function Country() {
                 </span>
               </h5>
             </div>
+
             <div>
               <h5>
                 Capital:
@@ -118,13 +129,20 @@ export default function Country() {
                 <span>{languages}</span>
               </h5>
             </div>
-
           </div>
-          <h5>
-            Border Countries: :
-            {' '}
-            <span>{borderCountries}</span>
-          </h5>
+
+          <div className="border-countries-container">
+            <h5>
+              Border Countries:
+              {' '}
+            </h5>
+            {borders.map((b, i) => (
+              <span key={b} className="border-countries">
+                {b}
+                {' '}
+              </span>
+            ))}
+          </div>
 
         </div>
       </div>

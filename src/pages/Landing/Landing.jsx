@@ -4,13 +4,14 @@ import SearchForm from '../../components/SearchForm/SearchForm';
 import { customAxios } from '../../axios/customAxios';
 import './Landing.css';
 import { useState } from 'react';
+import { useLoaderData } from 'react-router-dom';
 
-function fetchData(region) {
+function fetchData(name) {
   return {
-    queryKey: ['search', region || 'all'],
+    queryKey: ['search', name || 'all'],
     queryFn: async () => {
       const query = '?fields=name,flags,population,capital,region';
-      const searchURL = region ? `region${region && (`/${region}`)}${query}` : `all${query}`;
+      const searchURL = name ? `name/${name}${query}` : `all${query}`;
       const { data } = await customAxios.get(searchURL);
       return data;
     },
@@ -18,20 +19,38 @@ function fetchData(region) {
 }
 
 export function loader(queryClient) {
-  return async ({ params }) => {
-    console.log(params);
-    await queryClient.ensureQueryData(fetchData());
-    return null;
+  return async ({ request }) => {
+    const url = new URL(request.url);
+    const searchedName = url.searchParams.get('search') || '';
+    try {
+      await queryClient.ensureQueryData(fetchData(searchedName));
+      return { searchedName };
+    } catch (error) { return { error }; }
+
+    // return { searchedName };
   };
 }
 
 export default function Landing() {
-  const [srchPrms, setSrchPrms] = useState({ name: '', region: '' });
-  const { data } = useQuery(fetchData());
+  const { searchedName, error } = useLoaderData() || '';
+  // const [srchPrms, setSrchPrms] = useState(searchedName || '');
+  const [fltrdRegion, setFltrdRegion] = useState(null);
+  const {
+    isLoading, data, isError, error: axiosError,
+  } = useQuery(fetchData(searchedName));
+  const filteredResults = fltrdRegion ? data.filter((d) => d.region === fltrdRegion) : data;
+  console.log(filteredResults);
+  if (error) {
+    console.log(error);
+  }
+
   return (
-    <div style={{ marginTop: '10vh' }}>
-      <SearchForm />
-      <CardList data={data} srchPrms={srchPrms} />
+    <div>
+      <SearchForm setFltrdRegion={setFltrdRegion} />
+      {isLoading
+        ? <h2>loading..</h2>
+        : <CardList data={filteredResults} srchPrms={searchedName} />}
+
     </div>
   );
 }

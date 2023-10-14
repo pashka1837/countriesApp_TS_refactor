@@ -22,12 +22,19 @@ body {
   font-family: "Nunito Sans", sans-serif;
   font-size: 1rem;
   background-color: var(--BG-body);
+  /* height: 90dvh; */
 }
 
 body.dark {
   --BG-body: #202c36;
   --BG-cards: #2b3844;
   --text-color: #ffffff;
+}
+
+#root {
+  /* margin-top: 10dvh;
+  height: 90dvh; */
+  display: grid;
 }
 
 @media screen and (max-width: 600px) {
