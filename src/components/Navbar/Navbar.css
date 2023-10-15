@@ -11,7 +11,6 @@ nav {
   justify-content: space-between;
   grid-template-columns: auto auto;
   background-color: var(--BG-cards);
-  color: var(--text-color);
 }
 .logo {
   font-size: 1.5em;

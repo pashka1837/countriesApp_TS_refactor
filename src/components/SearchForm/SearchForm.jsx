@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 export default function SearchForm({ setFltrdRegion, fltrdRegion, searchedName }) {
   const [isFlrtToggled, setIsFlrtToggled] = useState(true);
   const popUpElRef = useRef();
+
   useEffect(() => {
     const regionsAr = [...popUpElRef.current.children];
     regionsAr.forEach((el) => {

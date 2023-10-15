@@ -23,6 +23,7 @@ body {
   font-family: "Nunito Sans", sans-serif;
   font-size: 1rem;
   background-color: var(--BG-body);
+  color: var(--text-color);
   /* height: 90dvh; */
 }
 

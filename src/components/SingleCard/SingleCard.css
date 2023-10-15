@@ -7,8 +7,6 @@ ion-card {
 
 ion-card:hover {
   scale: 1.1;
-  /* border: 2px solid #394a5a; */
-  /* box-shadow: 3px 3px 6px 1px #394a5a; */
   transition: all ease-in-out 0.3s;
 }
 

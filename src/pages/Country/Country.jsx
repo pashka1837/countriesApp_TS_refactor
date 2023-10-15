@@ -1,23 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import {
   redirect, useLoaderData, useLocation, useNavigate, useSubmit,
+  json,
 } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
 import { customAxios } from '../../axios/customAxios';
 
 import './Country.css';
-
-function fetchData(name) {
-  return {
-    queryKey: ['searchCountry', name],
-    queryFn: async () => {
-      const query = '?fields=name,flags,population,capital,region,subregion,tld,currencies,languages,borders,area';
-      const searchURL = `name/${name}${query}`;
-      const { data } = await customAxios.get(searchURL);
-      return data;
-    },
-  };
-}
 
 function getValues(obj) {
   if (!obj) return null;
@@ -32,17 +21,33 @@ function getValues(obj) {
   return valuesAr.length ? valuesAr.join(', ') : null;
 }
 
+function fetchData(name) {
+  return {
+    queryKey: ['searchCountry', name],
+    queryFn: async () => {
+      const query = '?fields=name,flags,population,capital,region,subregion,tld,currencies,languages,borders,area';
+      const searchURL = `name/${name}${query}`;
+      const { data } = await customAxios.get(searchURL);
+      return data;
+    },
+  };
+}
+
 export function loader(queryClient) {
   return async ({ params }) => {
     const { name } = params;
-    await queryClient.ensureQueryData(fetchData(name));
-    return { name };
+    try {
+      const data = await queryClient.fetchQuery(fetchData(name));
+      return { data };
+    } catch (e) {
+      throw json({ ...e });
+    }
   };
 }
 
 export default function Country() {
-  const { name } = useLoaderData();
-  const { data } = useQuery(fetchData(name));
+  const { data } = useLoaderData();
+  // const { data } = useQuery(fetchData(name));
   const { state: srchPrms } = useLocation();
   const submit = useSubmit();
   const navigate = useNavigate();

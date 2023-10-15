@@ -1,14 +1,13 @@
+import { useState } from 'react';
+import { useLoaderData } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import CardList from '../../components/CardList/CardList';
 import SearchForm from '../../components/SearchForm/SearchForm';
 import { customAxios } from '../../axios/customAxios';
-import './Landing.css';
-import { useState } from 'react';
-import { redirect, useLoaderData } from 'react-router-dom';
 
 function fetchData(name) {
   return {
-    queryKey: ['search', name],
+    queryKey: ['search', name || 'all'],
     queryFn: async () => {
       const query = '?fields=name,flags,population,capital,region';
       const searchURL = (name && name !== 'all') ? `name/${name}${query}` : `all${query}`;
@@ -26,7 +25,6 @@ export function loader(queryClient) {
       await queryClient.ensureQueryData(fetchData(searchedName));
       return { searchedName };
     } catch (error) {
-      redirect('/');
       return { error };
     }
   };
@@ -44,7 +42,6 @@ export default function Landing() {
       {error
         ? <h1 style={{ paddingLeft: '5%' }}>No results found</h1>
         : <CardList data={filteredResults} srchPrms={searchedName} />}
-
     </>
   );
 }
