@@ -45,6 +45,7 @@ export default function Country() {
   const { data } = useQuery(fetchData(name));
   const { state: srchPrms } = useLocation();
   const submit = useSubmit();
+  const navigate = useNavigate();
   const {
     area, borders, capital,
     currencies: currencyOfCountry, flags, languages: languageOfCountry,
@@ -58,8 +59,12 @@ export default function Country() {
 
   function handleBackButton() {
     const searchParams = new URLSearchParams();
-    searchParams.append('search', srchPrms);
-    submit(searchParams, { method: 'get', action: '/' });
+    if (srchPrms) {
+      searchParams.append('search', srchPrms);
+      submit(searchParams, { method: 'get', action: '/' });
+      return;
+    }
+    navigate('/');
   }
 
   return (

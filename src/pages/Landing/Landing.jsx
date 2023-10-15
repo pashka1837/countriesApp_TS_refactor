@@ -4,14 +4,14 @@ import SearchForm from '../../components/SearchForm/SearchForm';
 import { customAxios } from '../../axios/customAxios';
 import './Landing.css';
 import { useState } from 'react';
-import { useLoaderData } from 'react-router-dom';
+import { redirect, useLoaderData } from 'react-router-dom';
 
 function fetchData(name) {
   return {
-    queryKey: ['search', name || 'all'],
+    queryKey: ['search', name],
     queryFn: async () => {
       const query = '?fields=name,flags,population,capital,region';
-      const searchURL = name ? `name/${name}${query}` : `all${query}`;
+      const searchURL = (name && name !== 'all') ? `name/${name}${query}` : `all${query}`;
       const { data } = await customAxios.get(searchURL);
       return data;
     },
@@ -21,36 +21,30 @@ function fetchData(name) {
 export function loader(queryClient) {
   return async ({ request }) => {
     const url = new URL(request.url);
-    const searchedName = url.searchParams.get('search') || '';
+    const searchedName = url.searchParams.get('search');
     try {
       await queryClient.ensureQueryData(fetchData(searchedName));
       return { searchedName };
-    } catch (error) { return { error }; }
-
-    // return { searchedName };
+    } catch (error) {
+      redirect('/');
+      return { error };
+    }
   };
 }
 
 export default function Landing() {
-  const { searchedName, error } = useLoaderData() || '';
-  // const [srchPrms, setSrchPrms] = useState(searchedName || '');
-  const [fltrdRegion, setFltrdRegion] = useState(null);
-  const {
-    isLoading, data, isError, error: axiosError,
-  } = useQuery(fetchData(searchedName));
-  const filteredResults = fltrdRegion ? data.filter((d) => d.region === fltrdRegion) : data;
-  console.log(filteredResults);
-  if (error) {
-    console.log(error);
-  }
+  const { searchedName, error } = useLoaderData();
+  const [fltrdRegion, setFltrdRegion] = useState('All');
+  const { data } = useQuery(fetchData(searchedName));
+  const filteredResults = (fltrdRegion !== 'All') ? data.filter((d) => d.region === fltrdRegion) : data;
 
   return (
-    <div>
-      <SearchForm setFltrdRegion={setFltrdRegion} />
-      {isLoading
-        ? <h2>loading..</h2>
+    <>
+      <SearchForm setFltrdRegion={setFltrdRegion} fltrdRegion={fltrdRegion} searchedName={searchedName} />
+      {error
+        ? <h1 style={{ paddingLeft: '5%' }}>No results found</h1>
         : <CardList data={filteredResults} srchPrms={searchedName} />}
 
-    </div>
+    </>
   );
 }

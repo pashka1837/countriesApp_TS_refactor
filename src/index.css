@@ -19,6 +19,7 @@ body {
   --BG-body: #f2f2f2;
   --BG-cards: #ffffff;
   --text-color: #111517;
+
   font-family: "Nunito Sans", sans-serif;
   font-size: 1rem;
   background-color: var(--BG-body);
@@ -32,8 +33,6 @@ body.dark {
 }
 
 #root {
-  /* margin-top: 10dvh;
-  height: 90dvh; */
   display: grid;
 }
 
@@ -47,4 +46,19 @@ body.dark {
   body {
     font-size: 0.58rem;
   }
+}
+
+.loader {
+  display: grid;
+  place-items: center;
+  /* width: 100vw; */
+  height: 90dvh;
+  background-color: var(--BG-body);
+}
+
+ion-spinner {
+  width: 100px;
+  height: 100px;
+  --color: var(--text-color);
+  background-color: var(--BG-body);
 }

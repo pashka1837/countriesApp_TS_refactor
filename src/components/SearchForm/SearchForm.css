@@ -3,11 +3,12 @@
 }
 
 .search-container {
-  padding: 5%;
+  display: grid;
+  margin: 5%;
   color: var(--text-color);
 }
 
-.search-from {
+.search-form {
   display: grid;
   grid-template-columns: auto auto;
   justify-content: space-between;
@@ -39,16 +40,20 @@
 .filter-field {
   width: 200px;
   height: var(--heigth-srch-field);
-  padding: 0 6%;
   position: relative;
   display: grid;
-  grid-template-columns: auto auto;
-  align-items: center;
-  justify-content: space-between;
   background-color: var(--BG-cards);
   color: var(--text-color);
   border-radius: 5px;
   cursor: pointer;
+}
+
+.buttonToggle {
+  padding: 0 6%;
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  justify-content: space-between;
 }
 /* .filter-field button {
   background-color: transparent;
@@ -77,4 +82,26 @@
 
 .filter-popUp p {
   cursor: pointer;
+}
+
+@media screen and (max-width: 900px) {
+  .search-field {
+    width: 343px;
+  }
+
+  :root {
+    --heigth-srch-field: 48px;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .search-container {
+    margin-bottom: 10%;
+  }
+
+  .search-form {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 20%;
+  }
 }
