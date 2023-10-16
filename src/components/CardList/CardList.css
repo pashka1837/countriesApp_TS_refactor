@@ -1,7 +1,7 @@
 .countries-container {
   display: grid;
   justify-content: center;
-  padding: 0 5%;
+  padding: 0 5% 5% 5%;
   grid-template-columns: repeat(auto-fill, minmax(265px, 320px));
   gap: 75px;
 }

@@ -1,24 +1,30 @@
-import { useQuery } from '@tanstack/react-query';
 import {
-  redirect, useLoaderData, useLocation, useNavigate, useSubmit,
-  json,
+  useLoaderData, useLocation, useSubmit, json,
 } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
+import { useMemo } from 'react';
 import { customAxios } from '../../axios/customAxios';
 
 import './Country.css';
 
-function getValues(obj) {
-  if (!obj) return null;
-  const valuesAr = [];
+function refactor(obj) {
+  const property = new Map();
   for (const [key, value] of Object.entries(obj)) {
-    if (typeof obj[key] === 'object') {
-      for (const [key1, value1] of Object.entries(obj[key])) {
-        if (key1 === 'name' || key1 === 'official') valuesAr.push(obj[key][key1]);
+    if (key === 'flags' || key === 'borders') continue;
+    else if (typeof value !== 'object') property.set(key, [value]);
+    else if (Array.isArray(value)) property.set(key, [...value]);
+    else {
+      for (const [key1, value1] of Object.entries(value)) {
+        if (key === 'currencies') property.set(key, [...property.get(key) || [], value1.name]);
+        if (key === 'languages') property.set(key, [...property.get(key) || [], value1]);
+        if (key === 'name') {
+          if (key1 !== 'nativeName') continue;
+          for (const [keyN, valueN] of Object.entries(value1)) property.set('native name', [...property.get('native name') || [], valueN.common]);
+        }
       }
-    } else valuesAr.push(obj[key]);
+    }
   }
-  return valuesAr.length ? valuesAr.join(', ') : null;
+  return property;
 }
 
 function fetchData(name) {
@@ -47,29 +53,22 @@ export function loader(queryClient) {
 
 export default function Country() {
   const { data } = useLoaderData();
-  // const { data } = useQuery(fetchData(name));
-  const { state: srchPrms } = useLocation();
+  const { state } = useLocation();
   const submit = useSubmit();
-  const navigate = useNavigate();
+
   const {
-    area, borders, capital,
-    currencies: currencyOfCountry, flags, languages: languageOfCountry,
-    name: nameOfCountry, population,
-    region, subregion, tld,
+    borders,
+    flags,
+    name: nameOfCountry,
   } = data[1] ?? data[0];
 
-  const nativeName = getValues(nameOfCountry?.nativeName) || nameOfCountry.common;
-  const currencies = getValues(currencyOfCountry) || 'uknown';
-  const languages = getValues(languageOfCountry) || 'uknown';
+  const refactorData = useMemo(() => Array.from(refactor(data[1] || data[0])), [data]);
 
   function handleBackButton() {
     const searchParams = new URLSearchParams();
-    if (srchPrms) {
-      searchParams.append('search', srchPrms);
-      submit(searchParams, { method: 'get', action: '/' });
-      return;
-    }
-    navigate('/');
+    searchParams.append('search', state.search);
+    searchParams.append('region', state.region);
+    submit(searchParams, { method: 'get', action: '/' });
   }
 
   return (
@@ -83,62 +82,18 @@ export default function Country() {
         <img className="country-flag" src={flags?.svg} alt={nameOfCountry?.common} />
         <div className="country">
           <h1>{nameOfCountry?.official || nameOfCountry?.common}</h1>
-
           <div className="country-desc">
-            <div>
-              <h5>
-                Native Name:
-                {' '}
-                <span>{nativeName}</span>
-              </h5>
-              <h5>
-                Population:
-                {' '}
-                <span>{population}</span>
-              </h5>
-              <h5>
-                Region:
-                {' '}
-                <span>{region}</span>
-              </h5>
-              <h5>
-                Sub Region:
-                {' '}
-                <span>{subregion}</span>
-              </h5>
-              <h5>
-                Area:
-                {' '}
-                <span>
-                  {area}
-                  {' '}
-                  sq km
-                </span>
-              </h5>
-            </div>
-
-            <div>
-              <h5>
-                Capital:
-                {' '}
-                <span>{capital?.[0]}</span>
-              </h5>
-              <h5>
-                Top Level Domain:
-                {' '}
-                <span>{tld?.[0]}</span>
-              </h5>
-              <h5>
-                Currencies:
-                {' '}
-                <span>{currencies}</span>
-              </h5>
-              <h5>
-                Languages:
-                {' '}
-                <span>{languages}</span>
-              </h5>
-            </div>
+            {refactorData.map((d, i) => {
+              let [key, value] = d;
+              if (key === 'tld') key = 'Top Level Domain';
+              return (
+                <h5 className={i === 5 ? 'h5-desc' : ''} key={key}>
+                  {key}
+                  {': '}
+                  <span>{value.join(', ')}</span>
+                </h5>
+              );
+            })}
           </div>
 
           <div className="border-countries-container">
@@ -146,12 +101,15 @@ export default function Country() {
               Border Countries:
               {' '}
             </h5>
-            {borders.map((b, i) => (
-              <span key={b} className="border-countries">
-                {b}
-                {' '}
-              </span>
-            ))}
+            {borders.length
+              ? borders.map((b) => (
+                <span key={b} className="border-countries">
+                  {b || 'None'}
+                  {' '}
+                </span>
+              ))
+              : <span className="border-countries">None</span>}
+
           </div>
 
         </div>

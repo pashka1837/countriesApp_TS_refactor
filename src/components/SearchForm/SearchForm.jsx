@@ -1,50 +1,53 @@
-import { Form } from 'react-router-dom';
+import { Form, useSubmit } from 'react-router-dom';
 import { HiMagnifyingGlass } from 'react-icons/hi2';
 import { MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp } from 'react-icons/md';
+import { useState } from 'react';
 import './SearchForm.css';
-import { useEffect, useRef, useState } from 'react';
 
-export default function SearchForm({ setFltrdRegion, fltrdRegion, searchedName }) {
+export default function SearchForm({
+  setFltrdRegion, searchState,
+}) {
   const [isFlrtToggled, setIsFlrtToggled] = useState(true);
-  const popUpElRef = useRef();
+  const [isGrammaError, setIsGrammaError] = useState(false);
+  const submit = useSubmit();
+  const { search, region } = searchState;
+  const regex = /\`|\~|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\+|\=|\[|\{|\]|\}|\||\\|\'|\<|\,|\.|\>|\?|\/|\""|\;|\:|[0-9]/;
 
-  useEffect(() => {
-    const regionsAr = [...popUpElRef.current.children];
-    regionsAr.forEach((el) => {
-      el.style.textDecoration = 'none';
-      if (el.innerText === fltrdRegion)el.style.textDecoration = 'underline';
-    });
-  }, [fltrdRegion]);
+  const regionsAr = ['All', 'Africa', 'Americas', 'Asia', 'Europe', 'Oceania'];
+  const regionStyle = (reg, curReg) => ((reg === curReg) ? { textDecoration: 'underline' } : { textDecoration: 'none' });
 
-  function handleToggle(e) {
+  function handleFltr(choosenRegion) {
+    setFltrdRegion(choosenRegion);
     setIsFlrtToggled(!isFlrtToggled);
   }
 
-  function handleFltr(e) {
-    if (e.currentTarget === e.target) return;
-    const curEl = e.target;
-    setFltrdRegion(curEl.innerText);
+  function handleSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const inputData = formData.get('search');
+    if (inputData.match(regex)) {
+      setIsGrammaError(true);
+      return;
+    }
+    formData.set('region', region);
+    submit(formData);
   }
 
   return (
     <div className="search-container">
-      <Form className="search-form">
+      <Form className="search-form" onSubmit={handleSubmit}>
         <div className="search-field">
           <HiMagnifyingGlass />
-          <input type="search" name="search" id="search" placeholder="Search for a country" defaultValue={searchedName} />
+          <input type="text" name="search" id="search" placeholder="Search for a country" defaultValue={search} />
         </div>
+        {isGrammaError && <p className="gramma-error">Can not contain special characters or numbers</p>}
         <div className="filter-field">
-          <div onClick={handleToggle} className="buttonToggle">
+          <div onClick={() => setIsFlrtToggled(!isFlrtToggled)} className="buttonToggle">
             <p>Filter by Region</p>
             {isFlrtToggled ? <MdOutlineKeyboardArrowDown /> : <MdOutlineKeyboardArrowUp />}
           </div>
-          <div ref={popUpElRef} onClick={handleFltr} className={isFlrtToggled ? 'filter-popUp' : 'filter-popUp active'}>
-            <p>All</p>
-            <p>Africa</p>
-            <p>Americas</p>
-            <p>Asia</p>
-            <p>Europe</p>
-            <p>Oceania</p>
+          <div className={isFlrtToggled ? 'filter-popUp' : 'filter-popUp active'}>
+            {regionsAr.map((r) => <p key={r} onClick={() => handleFltr(r)} style={regionStyle(r, region)}>{r}</p>)}
           </div>
         </div>
       </Form>

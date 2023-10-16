@@ -8,15 +8,13 @@ export default function HomeLayout() {
   return (
     <>
       <Navbar />
-      {
-        isLoading
-          ? (
-            <div className="loader">
-              <IonSpinner name="crescent" />
-            </div>
-          )
-          : <Outlet />
-      }
+      {isLoading
+        ? (
+          <div className="loader">
+            <IonSpinner name="crescent" />
+          </div>
+        )
+        : <Outlet />}
     </>
   );
 }
