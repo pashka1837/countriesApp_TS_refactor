@@ -90,7 +90,16 @@ export default function Country() {
                 <h5 className={i === 5 ? 'h5-desc' : ''} key={key}>
                   {key}
                   {': '}
-                  <span>{value.join(', ')}</span>
+                  <span>
+                    {value.join(', ')}
+                  </span>
+                  {key === 'area' && (
+                  <span>
+                    {' '}
+                    km
+                    <sup>2</sup>
+                  </span>
+                  )}
                 </h5>
               );
             })}
