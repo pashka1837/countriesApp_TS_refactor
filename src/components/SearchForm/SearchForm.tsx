@@ -12,7 +12,7 @@ export default function SearchForm() {
 	const {search, region} = useSelector((store: RootState) => store.countryApp.searchState);
 
 	const dispatch = useDispatch();
-	const submit = useSubmit();
+	// Const submit = useSubmit();
 
 	const [isFlrtToggled, setIsFlrtToggled] = useState(true);
 	const [isGrammaError, setIsGrammaError] = useState(false);
@@ -42,9 +42,26 @@ export default function SearchForm() {
 		}
 
 		dispatch(changeSearchState({search: inputSearch, region}));
-
-		submit(formData);
+		// Submit(null);
 	}
+
+	// Function handleSubmit(e: FormEvent<HTMLFormElement>) {
+	// 	e.preventDefault();
+	// 	const formData = new FormData(e.currentTarget);
+	// 	let inputSearch = formData.get('search') as string;
+	// 	if (!inputSearch) {
+	// 		return;
+	// 	}
+
+	// 	inputSearch = inputSearch.trim();
+	// 	if (regex.exec(inputSearch)) {
+	// 		setIsGrammaError(true);
+	// 		return;
+	// 	}
+
+	// 	dispatch(changeSearchState({search: inputSearch, region}));
+	// 	// Submit(null);
+	// }
 
 	return (
 		<div className='search-container'>

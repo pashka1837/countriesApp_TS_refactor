@@ -28,7 +28,7 @@ const router = createBrowserRouter([
 		children: [
 			{
 				index: true,
-				loader: landingPageLoader(queryClient),
+				// Loader: landingPageLoader(queryClient),
 				element: <Landing />,
 				// ErrorElement: <PageError />,
 			},

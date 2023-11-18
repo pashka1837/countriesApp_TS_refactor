@@ -1,11 +1,13 @@
 import {
-	useLoaderData, useLocation, useSubmit, json,
+	useLoaderData, useLocation, useSubmit, json, useNavigate,
 } from 'react-router-dom';
 import {BiArrowBack} from 'react-icons/bi';
 import {useMemo} from 'react';
 import {customAxios} from '../../axios/customAxios';
+import {useDispatch, useSelector} from 'react-redux';
 
 import './Country.css';
+import {type RootState} from '../../store';
 
 function refactor(obj) {
 	const property = new Map();
@@ -68,8 +70,10 @@ export function loader(queryClient) {
 
 export default function Country() {
 	const {data} = useLoaderData();
-	const {state} = useLocation();
+	const {searchState} = useSelector((store: RootState) => store.countryApp);
+	// Const {state} = useLocation();
 	const submit = useSubmit();
+	const navigate = useNavigate();
 
 	const {
 		borders,
@@ -80,10 +84,10 @@ export default function Country() {
 	const refactorData = useMemo(() => Array.from(refactor(data[1] || data[0])), [data]);
 
 	function handleBackButton() {
-		const searchParams = new URLSearchParams();
-		searchParams.append('search', state.search);
-		searchParams.append('region', state.region);
-		submit(searchParams, {method: 'get', action: '/'});
+		// Const searchParams = new URLSearchParams();
+		// searchParams.append('search', searchState.search);
+		// submit(searchParams, {method: 'get', action: '/'});
+		navigate('/');
 	}
 
 	return (
