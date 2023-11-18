@@ -2,7 +2,7 @@ import {useLoaderData} from 'react-router-dom';
 import {useQuery, type QueryClient} from '@tanstack/react-query';
 import CardList from '../../components/CardList/CardList';
 import SearchForm from '../../components/SearchForm/SearchForm';
-import {customAxios} from '../../axios/customAxios';
+import {type AxiosResponse, customAxios} from '../../axios/customAxios';
 import {setCountries} from '../../feature/themeSlice';
 import {type TSmallData} from '../../types/types';
 import {useDispatch, useSelector} from 'react-redux';
@@ -18,7 +18,7 @@ function fetchData(name: string) {
 		async queryFn(): Promise<TSmallData[]> {
 			const query = '?fields=name,flags,population,capital,region';
 			const searchUrl: string = (search && search !== 'all') ? `name/${search}${query}` : `all${query}`;
-			const response: Response = await customAxios.get(searchUrl);
+			const response: AxiosResponse<TSmallData[]> = await customAxios.get(searchUrl);
 			return response.data;
 		},
 	};
@@ -37,16 +37,16 @@ function fetchData(name: string) {
 // 	};
 // }
 
-type TLoaderReturn = {
-	search: string;
-	region?: string;
-	error: undefined | Error;
-};
+// type TLoaderReturn = {
+// 	search: string;
+// 	region?: string;
+// 	error: undefined | Error;
+// };
 
 export default function Landing() {
 	const {search} = useSelector((store: RootState) => store.countryApp.searchState);
 	const dispatch = useDispatch();
-	const {data, error, isLoading} = useQuery(fetchData(search));
+	const {data, isError, isLoading} = useQuery(fetchData(search));
 
 	if (isLoading) {
 		return (
@@ -56,14 +56,14 @@ export default function Landing() {
 		);
 	}
 
-	if (error) {
+	if (isError) {
 		return (<>
 			<SearchForm />
 			<h1 style={{paddingLeft: '5%'}}>No results found</h1>
 		</>);
 	}
 
-	dispatch(setCountries(data!));
+	dispatch(setCountries(data));
 
 	return (
 		<>
