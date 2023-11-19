@@ -1,18 +1,16 @@
-import {Form, useSubmit} from 'react-router-dom';
+import {Form} from 'react-router-dom';
 import {HiMagnifyingGlass} from 'react-icons/hi2';
 import {MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp} from 'react-icons/md';
-import {type FormEvent, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-
-import './SearchForm.css';
-import {type RootState} from '../../store';
 import {changeSearchState} from '../../feature/themeSlice';
+import {type RootState} from '../../store';
+import {type FormEvent, useState} from 'react';
+import './SearchForm.css';
 
 export default function SearchForm() {
 	const {search, region} = useSelector((store: RootState) => store.countryApp.searchState);
 
 	const dispatch = useDispatch();
-	// Const submit = useSubmit();
 
 	const [isFlrtToggled, setIsFlrtToggled] = useState(true);
 	const [isGrammaError, setIsGrammaError] = useState(false);
