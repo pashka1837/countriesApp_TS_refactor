@@ -1,13 +1,17 @@
 import {
-	useLoaderData, useLocation, useSubmit, json, useNavigate,
+	useLoaderData, useLocation, useSubmit, json, useNavigate, type Params, useParams,
 } from 'react-router-dom';
 import {BiArrowBack} from 'react-icons/bi';
 import {useMemo} from 'react';
-import {customAxios} from '../../axios/customAxios';
+import {type AxiosResponse, customAxios} from '../../axios/customAxios';
 import {useDispatch, useSelector} from 'react-redux';
+import {useQuery, type QueryClient} from '@tanstack/react-query';
 
 import './Country.css';
 import {type RootState} from '../../store';
+import Loader from '../../components/Loader/Loader';
+import fetchData from '../../utils/fetchQuery';
+import {type TFetchData} from '../../types/types';
 
 function refactor(obj) {
 	const property = new Map();
@@ -44,20 +48,21 @@ function refactor(obj) {
 	return property;
 }
 
-function fetchData(name) {
-	return {
-		queryKey: ['searchCountry', name],
-		async queryFn() {
-			const query = '?fields=name,flags,population,capital,region,subregion,tld,currencies,languages,borders,area';
-			const searchURL = `name/${name}${query}`;
-			const {data} = await customAxios.get(searchURL);
-			return data;
-		},
-	};
-}
+// Function fetchData(search: string, base: string, queryKey:string) {
+// 	return {
+// 		queryKey: ['searchCountry', search],
+// 		retry: 1,
+// 		async queryFn(): Promise<TSmallData[]> {
+// 			const query = '?fields=name,flags,population,capital,region,subregion,tld,currencies,languages,borders,area';
+// 			const searchUrl: string = ()  `name/${search}${query}`;
+// 			const response: AxiosResponse<TSmallData[]> = await customAxios.get(searchUrl);
+// 			return response.data;
+// 		},
+// 	};
+// }
 
-export function loader(queryClient) {
-	return async ({params}) => {
+export function loader(queryClient: QueryClient) {
+	return async ({params}: Params) => {
 		const {name} = params;
 		try {
 			const data = await queryClient.fetchQuery(fetchData(name));
@@ -69,19 +74,30 @@ export function loader(queryClient) {
 }
 
 export default function Country() {
-	const {data} = useLoaderData();
-	const {searchState} = useSelector((store: RootState) => store.countryApp);
-	// Const {state} = useLocation();
-	const submit = useSubmit();
+	const {name} = useParams();
 	const navigate = useNavigate();
+
+	const dataToFetch: TFetchData = {
+		search: name!,
+		base: `name/${name}`,
+		queryKey: 'searchCountry',
+		aditionalQuery: ',subregion,tld,currencies,languages,borders,area',
+	};
+
+	const {data, isError, isLoading} = useQuery(fetchData(dataToFetch));
+
+	if (isLoading) {
+		return <Loader/>;
+	}
+
+	// Const refactorData = useMemo(() => Array.from(refactor(data[1] || data[0])), [data]);
+	const refactorData = Array.from(refactor(data[1] || data[0]));
 
 	const {
 		borders,
 		flags,
 		name: nameOfCountry,
 	} = data[1] ?? data[0];
-
-	const refactorData = useMemo(() => Array.from(refactor(data[1] || data[0])), [data]);
 
 	function handleBackButton() {
 		// Const searchParams = new URLSearchParams();

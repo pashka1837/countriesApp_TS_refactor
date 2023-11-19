@@ -29,7 +29,7 @@ export type CounterState = {
 const initialState: CounterState = {
 	isDark: checkUserTheme(),
 	searchState: {
-		search: 'All',
+		search: 'all',
 	    region: 'All',
 	},
 	countries: [],

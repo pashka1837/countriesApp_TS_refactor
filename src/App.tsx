@@ -34,7 +34,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: 'country/:name',
-				loader: countryPageLoader(queryClient),
+				// Loader: countryPageLoader(queryClient),
 				element: <Country />,
 				// ErrorElement: <PageError />,
 			},

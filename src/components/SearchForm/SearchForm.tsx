@@ -35,7 +35,7 @@ export default function SearchForm() {
 			return;
 		}
 
-		inputSearch = inputSearch.trim();
+		inputSearch = inputSearch.trim().toLowerCase();
 		if (regex.exec(inputSearch)) {
 			setIsGrammaError(true);
 			return;

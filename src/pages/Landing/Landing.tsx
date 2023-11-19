@@ -1,28 +1,26 @@
-import {useLoaderData} from 'react-router-dom';
-import {useQuery, type QueryClient} from '@tanstack/react-query';
+import {useDispatch, useSelector} from 'react-redux';
+import {useQuery} from '@tanstack/react-query';
 import CardList from '../../components/CardList/CardList';
 import SearchForm from '../../components/SearchForm/SearchForm';
-import {type AxiosResponse, customAxios} from '../../axios/customAxios';
-import {setCountries} from '../../feature/themeSlice';
-import {type TSmallData} from '../../types/types';
-import {useDispatch, useSelector} from 'react-redux';
+import Loader from '../../components/Loader/Loader';
+import fetchData from '../../utils/fetchQuery';
 import {type RootState} from '../../store';
+import {type TFetchData} from '../../types/types';
+import {setCountries} from '../../feature/themeSlice';
 
-import {IonSpinner} from '@ionic/react';
-
-function fetchData(name: string) {
-	const search = name.trim().toLowerCase();
-	return {
-		queryKey: ['search', search],
-		retry: 1,
-		async queryFn(): Promise<TSmallData[]> {
-			const query = '?fields=name,flags,population,capital,region';
-			const searchUrl: string = (search && search !== 'all') ? `name/${search}${query}` : `all${query}`;
-			const response: AxiosResponse<TSmallData[]> = await customAxios.get(searchUrl);
-			return response.data;
-		},
-	};
-}
+// Function fetchData(search: string) {
+// 	// const search = name.trim().toLowerCase();
+// 	return {
+// 		queryKey: ['search', search],
+// 		retry: 1,
+// 		async queryFn(): Promise<TSmallData[]> {
+// 			const query = '?fields=name,flags,population,capital,region';
+// 			const searchUrl: string = (search && search !== 'all') ? `name/${search}${query}` : `all${query}`;
+// 			const response: AxiosResponse<TSmallData[]> = await customAxios.get(searchUrl);
+// 			return response.data;
+// 		},
+// 	};
+// }
 
 // Export function loader(queryClient: QueryClient) {
 // 	return async ({request}: {request: Request}) => {
@@ -46,14 +44,16 @@ function fetchData(name: string) {
 export default function Landing() {
 	const {search} = useSelector((store: RootState) => store.countryApp.searchState);
 	const dispatch = useDispatch();
-	const {data, isError, isLoading} = useQuery(fetchData(search));
+	const dataToFetch: TFetchData = {
+		search,
+		base: (search && search !== 'all') ? `name/${search}` : 'all',
+		queryKey: 'search',
+	};
+
+	const {data, isError, isLoading} = useQuery(fetchData(dataToFetch));
 
 	if (isLoading) {
-		return (
-			<div className='loader'>
-				<IonSpinner name='crescent' />
-			</div>
-		);
+		return <Loader />;
 	}
 
 	if (isError) {

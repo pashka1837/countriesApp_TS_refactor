@@ -18,3 +18,10 @@ export type TSmallData = {
 	population?: number;
 	region: string;
 };
+
+export type TFetchData = {
+	search: string ;
+	base: string;
+	queryKey: string;
+	aditionalQuery?: string;
+};
