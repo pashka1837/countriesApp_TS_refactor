@@ -15,7 +15,7 @@ export default function SearchForm() {
 	const [isFlrtToggled, setIsFlrtToggled] = useState(true);
 	const [isGrammaError, setIsGrammaError] = useState(false);
 
-	const regex = /\`|\~|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\+|\=|\[|\{|\]|\}|\||\\|\'|\<|\,|\.|\>|\?|\/|\""|\;|\:|[0-9]\s+$/;
+	const regex = /`|~|!|@|#|\$|%|\^|&|\*|\(|\)|\+|=|\[|\{|\]|\}|\||\\|'|<|,|\.|>|\?|\/|""|;|:|[0-9]\s+$/;
 
 	const regionsAr = ['All', 'Africa', 'Americas', 'Asia', 'Europe', 'Oceania'];
 	const regionStyle = (reg: string, curReg: string) => ((reg === curReg) ? {textDecoration: 'underline'} : {textDecoration: 'none'});
@@ -40,26 +40,7 @@ export default function SearchForm() {
 		}
 
 		dispatch(changeSearchState({search: inputSearch, region}));
-		// Submit(null);
 	}
-
-	// Function handleSubmit(e: FormEvent<HTMLFormElement>) {
-	// 	e.preventDefault();
-	// 	const formData = new FormData(e.currentTarget);
-	// 	let inputSearch = formData.get('search') as string;
-	// 	if (!inputSearch) {
-	// 		return;
-	// 	}
-
-	// 	inputSearch = inputSearch.trim();
-	// 	if (regex.exec(inputSearch)) {
-	// 		setIsGrammaError(true);
-	// 		return;
-	// 	}
-
-	// 	dispatch(changeSearchState({search: inputSearch, region}));
-	// 	// Submit(null);
-	// }
 
 	return (
 		<div className='search-container'>

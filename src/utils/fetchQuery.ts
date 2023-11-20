@@ -11,6 +11,7 @@ function fetchData <T>({search, base, queryKey, aditionalQuery = ''}: TFetchData
 			const response: AxiosResponse<T> = await customAxios.get(searchUrl);
 			return response.data;
 		},
+
 	};
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import {createSlice} from '@reduxjs/toolkit';
 import type {PayloadAction} from '@reduxjs/toolkit';
 import {type TSmallData, type TSearchState} from '../types/types';
@@ -8,16 +9,6 @@ function checkUserTheme(): boolean {
 	document.body.classList.toggle('dark', isDarkTheme);
 	localStorage.setItem('isDarkTheme', `${isDarkTheme}`);
 	return isDarkTheme;
-}
-
-function filterData(region: string, data: TSmallData[] | undefined): TSmallData[] {
-	return data!.filter(d => {
-		if (region === 'All') {
-			return true;
-		}
-
-		return d.region === region;
-	});
 }
 
 export type CounterState = {
@@ -40,7 +31,6 @@ const countrySlice = createSlice({
 	initialState,
 	reducers: {
 		setCountries(state, action: PayloadAction<TSmallData[]>) {
-			console.log(action.payload);
 			state.countries = action.payload;
 		},
 		changeAppTheme(state) {

@@ -4,7 +4,7 @@ import {RouterProvider, createBrowserRouter} from 'react-router-dom';
 import {setupIonicReact} from '@ionic/react';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import Landing, {loader as landingPageLoader} from './pages/Landing/Landing';
-import Country, {loader as countryPageLoader} from './pages/Country/Country';
+import Country from './pages/Country/Country';
 import Error from './pages/Error/Error';
 import HomeLayout from './pages/HomeLayout/HomeLayout';
 import PageError from './pages/PageError/PageError';
@@ -24,13 +24,13 @@ const router = createBrowserRouter([
 	{
 		path: '/',
 		element: <HomeLayout />,
-		// ErrorElement: <Error />,
+		errorElement: <Error />,
 		children: [
 			{
 				index: true,
-				// Loader: landingPageLoader(queryClient),
+				loader: landingPageLoader(queryClient, store.getState()),
 				element: <Landing />,
-				// ErrorElement: <PageError />,
+				errorElement: <PageError />,
 			},
 			{
 				path: 'country/:name',
@@ -42,7 +42,7 @@ const router = createBrowserRouter([
 	},
 ]);
 
-const App = (): JSX.Element => (
+const App = () => (
 	<QueryClientProvider client={queryClient}>
 		<RouterProvider router={router} />
 	</QueryClientProvider>

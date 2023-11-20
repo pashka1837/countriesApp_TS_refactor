@@ -12,9 +12,9 @@ const Navbar = () => {
 			<h3 className='logo'>Where in the world?</h3>
 			<div className='switch-theme-container'>
 				<button onClick={() => dispatch(changeAppTheme())} className='switch-theme-btn' type='button'>
-					{(!isDark)
-						? <><LuFlashlightOff className='moon-icon'/> <span>Dark Mode</span></>
-						: <><LuFlashlight className='moon-icon'/> <span>Light Mode</span></>
+					{(isDark)
+						? <><LuFlashlight className='moon-icon'/> <span>Light Mode</span></>
+						: <><LuFlashlightOff className='moon-icon'/> <span>Dark Mode</span></>
 					}
 				</button>
 			</div>

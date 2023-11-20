@@ -1,26 +1,33 @@
-import { useContext } from 'react';
-import { Link, useRouteError } from 'react-router-dom';
+
+import {Link, useRouteError} from 'react-router-dom';
 import notFoundImgDark from '../../assets/not-found-404-dark.svg';
 import notFoundImgLigth from '../../assets/not-found-404-dark-light.svg';
+import {useDispatch, useSelector} from 'react-redux';
+import {changeSearchState} from '../../feature/themeSlice';
+
+import {type RootState} from '../../store';
+
 import './Error.css';
 
-import { ThemeContext } from '../../context/GlobalContext';
-
 export default function Error() {
-  const { isDarkTheme } = useContext(ThemeContext);
-  const error = useRouteError();
-  return (
-    <div className="error-container">
-      <img src={isDarkTheme ? notFoundImgLigth : notFoundImgDark} alt="not found" />
-      <div className="error-desc">
-        <h2>Ooh... There is an Error!</h2>
-        <p>
-          {error.status}
-          {' '}
-          {error.error.message}
-        </p>
-      </div>
-      <Link to="/">Link Back Home</Link>
-    </div>
-  );
+	const {isDark} = useSelector((store: RootState) => store.countryApp);
+	const dispatch = useDispatch();
+
+	function handleBackHome() {
+		dispatch(changeSearchState({search: 'all', region: 'All'}));
+	}
+
+	const error = useRouteError() as string;
+	return (
+		<div className='error-container'>
+			<img src={isDark ? notFoundImgLigth : notFoundImgDark} alt='not found' />
+			<div className='error-desc'>
+				<h2>Ooh... There is an Error!</h2>
+				<p>
+					{error}
+				</p>
+			</div>
+			<Link to='/' onClick={handleBackHome}>Link Back Home</Link>
+		</div>
+	);
 }

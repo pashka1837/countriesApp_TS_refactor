@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 export type TSearchState = {
 	search: string;
 	region: string;
@@ -27,7 +28,7 @@ export type TCurrency = {
 	symbol: string;
 };
 type TLanguages = Record<string, string>;
-type TCurrencies = Record<string, TCurrency>;
+export type TCurrencies = Record<string, TCurrency>;
 
 export type TBigData = {
 	area: number;
@@ -59,5 +60,3 @@ export type TFetchData = {
 };
 
 export type TCountrySingleDesc = [string, string[]];
-
-// Export type TCountryFltrdD = TCountrySingleDesc[];

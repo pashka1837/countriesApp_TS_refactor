@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import axios, {type AxiosResponse} from 'axios';
 
 const baseURL = 'https://restcountries.com/v3.1/';
