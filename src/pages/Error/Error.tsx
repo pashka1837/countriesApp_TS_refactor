@@ -18,14 +18,13 @@ export default function Error() {
 	}
 
 	const error = useRouteError() as string;
+	console.log(error);
 	return (
 		<div className='error-container'>
 			<img src={isDark ? notFoundImgLigth : notFoundImgDark} alt='not found' />
 			<div className='error-desc'>
 				<h2>Ooh... There is an Error!</h2>
-				<p>
-					{error}
-				</p>
+				<p>Some Error happend :(</p>
 			</div>
 			<Link to='/' onClick={handleBackHome}>Link Back Home</Link>
 		</div>

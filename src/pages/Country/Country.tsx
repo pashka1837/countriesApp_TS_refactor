@@ -3,9 +3,10 @@ import {useParams} from 'react-router-dom';
 import {useQuery} from '@tanstack/react-query';
 import Loader from '../../components/Loader/Loader';
 import {BackButton, Description, BorderCountries} from './index.ts';
-
 import fetchData from '../../utils/fetchQuery';
 import {type TCountrySingleDesc, type TBigData, type TFetchData, type TCurrency, type TNativeName, type TCurrencies} from '../../types/types';
+import {AxiosError} from 'axios';
+import PageError from '../PageError/PageError.tsx';
 import './Country.css';
 
 function refactor(obj: Omit<TBigData, 'flags'>): Map<string, string[]> {
@@ -57,17 +58,25 @@ export default function Country() {
 		aditionalQuery: ',subregion,tld,currencies,languages,borders,area',
 	};
 
-	const {data, isError, isLoading} = useQuery(fetchData<TBigData[]>(dataToFetch));
+	const {data, error, isFetching} = useQuery(fetchData<TBigData[]>(dataToFetch));
 
-	if (isLoading) {
+	if (isFetching) {
 		return <Loader/>;
 	}
 
-	if (isError) {
-		return <h1 style={{paddingLeft: '5%'}}>No results found</h1>;
+	if (error instanceof AxiosError) {
+		if (error.code === 'ERR_BAD_REQUEST') {
+			return (
+				<h1 style={{paddingLeft: '5%'}}>No results found</h1>
+			);
+		}
+
+		console.log(error);
+
+		return <PageError error={error} />;
 	}
 
-	const countryRawData = data[1] ?? data[0];
+	const countryRawData = data![1] ?? data![0];
 
 	const {
 		borders,
@@ -93,37 +102,3 @@ export default function Country() {
 	);
 }
 
-// Function refactor(obj: Omit<TBigData, 'flags'>): TCountryFltrdD {
-// 	const property = new Map();
-// 	for (const [key, value] of Object.entries(obj)) {
-// 		if (key === 'flags' || key === 'borders') {
-// 			continue;
-// 		} else if (typeof value !== 'object') {
-// 			property.set(key, [value]);
-// 		} else if (Array.isArray(value)) {
-// 			property.set(key, [...value]);
-// 		} else {
-// 			for (const [key1, value1] of Object.entries(value)) {
-// 				if (key === 'currencies') {
-// 					property.set(key, [...property.get(key) || [], value1.name]);
-// 				}
-
-// 				if (key === 'languages') {
-// 					property.set(key, [...property.get(key) || [], value1]);
-// 				}
-
-// 				if (key === 'name') {
-// 					if (key1 !== 'nativeName') {
-// 						continue;
-// 					}
-
-// 					for (const [keyN, valueN] of Object.entries(value1)) {
-// 						property.set('native name', [...property.get('native name') || [], valueN.common]);
-// 					}
-// 				}
-// 			}
-// 		}
-// 	}
-
-// 	return property;
-// }

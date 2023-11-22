@@ -7,23 +7,8 @@ import fetchData from '../../utils/fetchQuery';
 import {type RootState} from '../../store';
 import {type TSmallData, type TFetchData} from '../../types/types';
 import {setCountries} from '../../feature/themeSlice';
-
-import {type QueryClient} from '@tanstack/react-query';
 import {AxiosError} from 'axios';
-
-export function loader(queryClient: QueryClient, state: RootState) {
-	return async () => {
-		const {search} = state.countryApp.searchState;
-		const dataToFetch: TFetchData = {
-			search,
-			base: (search && search !== 'all') ? `name/${search}` : 'all',
-			queryKey: 'search',
-		};
-
-		await queryClient.ensureQueryData(fetchData<TSmallData[]>(dataToFetch));
-		return null;
-	};
-}
+import PageError from '../PageError/PageError';
 
 export default function Landing() {
 	const {search} = useSelector((store: RootState) => store.countryApp.searchState);
@@ -41,11 +26,17 @@ export default function Landing() {
 		return <Loader />;
 	}
 
-	if (error instanceof AxiosError && error.code === 'ERR_BAD_REQUEST') {
-		return (<>
-			<SearchForm />
-			<h1 style={{paddingLeft: '5%'}}>No results found</h1>
-		</>);
+	if (error instanceof AxiosError) {
+		if (error.code === 'ERR_BAD_REQUEST') {
+			return (<>
+				<SearchForm />
+				<h1 style={{paddingLeft: '5%'}}>No results found</h1>
+			</>);
+		}
+
+		console.log(error);
+
+		return <PageError error={error} />;
 	}
 
 	dispatch(setCountries(data!));

@@ -1,4 +1,4 @@
-import {Link, useRouteError} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import notFoundImgDark from '../../assets/not-found-404-dark.svg';
 import notFoundImgLigth from '../../assets/not-found-404-dark-light.svg';
 import {useDispatch, useSelector} from 'react-redux';
@@ -6,11 +6,10 @@ import {type RootState} from '../../store';
 import {type AxiosError} from 'axios';
 import {changeSearchState} from '../../feature/themeSlice';
 
-export default function PageError() {
+export default function PageError({error}: {error: AxiosError}) {
 	const dispatch = useDispatch();
 
 	const {isDark} = useSelector((store: RootState) => store.countryApp);
-	const error = useRouteError() as AxiosError;
 
 	function handleBackHome() {
 		dispatch(changeSearchState({search: 'all', region: 'All'}));
