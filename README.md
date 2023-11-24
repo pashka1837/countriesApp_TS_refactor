@@ -1,5 +1,5 @@
-# React + Vite project
+# React + Vite + TypeScript + SCSS project
 
 ## you can search for any country
 
-### https://652da6230a58bb173ecd3681--celadon-custard-c9ed23.netlify.app/
+### https://656071b1ced67220c7384a8b--grand-valkyrie-018ed6.netlify.app/
