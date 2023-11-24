@@ -1,23 +1,13 @@
 import {type RootState} from '../../store';
+import filterData from '../../utils/filterData';
 import SingleCard from '../SingleCard/SingleCard';
-import './CardList.css';
 import {useSelector} from 'react-redux';
-import {type TSmallData} from '../../types/types';
-
-function filterData(region: string, data: TSmallData[] | undefined): TSmallData[] {
-	return data!.filter(d => {
-		if (region === 'All') {
-			return true;
-		}
-
-		return d.region === region;
-	});
-}
+import './CardList.scss';
 
 export default function CardList() {
-	const {countries, searchState} = useSelector((store: RootState) => store.countryApp);
+	const {countries, region} = useSelector((store: RootState) => store.countryApp);
 
-	const filteredCountries = filterData(searchState.region, countries);
+	const filteredCountries = filterData(region, countries);
 
 	if (!filteredCountries.length) {
 		return (<h1 style={{paddingLeft: '5%'}}>No results found</h1>);

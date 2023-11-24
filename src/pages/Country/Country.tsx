@@ -7,7 +7,7 @@ import fetchData from '../../utils/fetchQuery';
 import {type TCountrySingleDesc, type TBigData, type TFetchData, type TCurrency, type TNativeName, type TCurrencies} from '../../types/types';
 import {AxiosError} from 'axios';
 import PageError from '../PageError/PageError.tsx';
-import './Country.css';
+import './Country.scss';
 
 function refactor(obj: Omit<TBigData, 'flags'>): Map<string, string[]> {
 	const property = new Map<string, string[]>();

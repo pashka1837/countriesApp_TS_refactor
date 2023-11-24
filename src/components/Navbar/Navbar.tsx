@@ -1,4 +1,4 @@
-import './Navbar.css';
+import './Navbar.scss';
 import {LuFlashlightOff, LuFlashlight} from 'react-icons/lu';
 import {useDispatch, useSelector} from 'react-redux';
 import {type RootState} from '../../store';

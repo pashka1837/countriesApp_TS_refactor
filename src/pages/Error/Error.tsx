@@ -7,7 +7,7 @@ import {changeSearchState} from '../../feature/themeSlice';
 
 import {type RootState} from '../../store';
 
-import './Error.css';
+import './Error.scss';
 
 export default function Error() {
 	const {isDark} = useSelector((store: RootState) => store.countryApp);

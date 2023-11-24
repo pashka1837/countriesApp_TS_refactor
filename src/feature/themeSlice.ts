@@ -13,16 +13,15 @@ function checkUserTheme(): boolean {
 
 export type CounterState = {
 	isDark: boolean;
-	searchState: TSearchState;
+	search: string;
+	region: string;
 	countries: TSmallData[];
 };
 
 const initialState: CounterState = {
 	isDark: checkUserTheme(),
-	searchState: {
-		search: 'all',
-	    region: 'All',
-	},
+	search: 'all',
+	region: 'All',
 	countries: [],
 };
 
@@ -40,12 +39,20 @@ const countrySlice = createSlice({
 		},
 		changeSearchState(state, action: PayloadAction<TSearchState>) {
 			const {search, region} = action.payload;
-			state.searchState.region = region;
-			state.searchState.search = search;
+			state.region = region;
+			state.search = search;
+		},
+		changeSearch(state, action: PayloadAction<string>) {
+			const search = action.payload;
+			state.search = search;
+		},
+		changeRegion(state, action: PayloadAction<string>) {
+			const region = action.payload;
+			state.region = region;
 		},
 
 	},
 });
 
 export default countrySlice.reducer;
-export const {changeAppTheme, changeSearchState, setCountries} = countrySlice.actions;
+export const {changeAppTheme, changeSearchState, changeSearch, setCountries, changeRegion} = countrySlice.actions;

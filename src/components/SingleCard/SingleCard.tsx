@@ -1,6 +1,6 @@
 import {IonCard, IonCardContent} from '@ionic/react';
 import {useNavigate} from 'react-router-dom';
-import './SingleCard.css';
+import './SingleCard.scss';
 import {type TSmallData} from '../../types/types';
 
 export default function SingleCard({

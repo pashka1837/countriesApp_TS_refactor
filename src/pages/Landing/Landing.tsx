@@ -11,7 +11,7 @@ import {AxiosError} from 'axios';
 import PageError from '../PageError/PageError';
 
 export default function Landing() {
-	const {search} = useSelector((store: RootState) => store.countryApp.searchState);
+	const search = useSelector((store: RootState) => store.countryApp.search);
 	const dispatch = useDispatch();
 
 	const dataToFetch: TFetchData = {
@@ -26,7 +26,7 @@ export default function Landing() {
 		return <Loader />;
 	}
 
-	if (error instanceof AxiosError) {
+	if (error && error instanceof AxiosError) {
 		if (error.code === 'ERR_BAD_REQUEST') {
 			return (<>
 				<SearchForm />

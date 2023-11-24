@@ -9,13 +9,17 @@
   grid-gap: 20px;
   color: var(--text-color);
 }
-.error-container a {
-  color: var(--text-color);
+.error-container {
+  a {
+    color: var(--text-color);
+  }
 }
 
-.error-container img {
-  width: 50%;
-  object-fit: cover;
+.error-container {
+  img {
+    width: 50%;
+    object-fit: cover;
+  }
 }
 
 .error-desc {
@@ -24,7 +28,9 @@
 }
 
 @media screen and (min-width: 1145px) {
-  .error-container img {
-    width: 30%;
+  .error-container {
+    img {
+      width: 30%;
+    }
   }
 }

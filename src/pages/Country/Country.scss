@@ -18,9 +18,12 @@
   color: var(--text-color);
 }
 
-.country-back-btn:hover {
-  scale: 1.1;
-  transition: all 0.2s;
+.country-back-btn {
+  &:hover {
+    scale: 1.1;
+    transition: all 0.2s;
+  }
+  
 }
 
 .inner-country-container {
@@ -54,14 +57,18 @@
   justify-items: start;
 }
 
-.country-desc span {
-  font-weight: 300;
+.country-desc  {
+  span {
+    font-weight: 300;
+  }
 }
 
-.inner-country-container h5 {
-  font-size: 1em;
-  font-weight: 600;
-  text-transform: capitalize;
+.inner-country-container  {
+  h5  {
+    font-size: 1em;
+    font-weight: 600;
+   text-transform: capitalize;
+  }
 }
 
 .border-countries-container {
@@ -132,8 +139,9 @@
     padding-top: 5%;
   }
 
-  .border-countries-container h5 {
-    width: 100%;
+  .border-countries-container  {
+    h5{
+    width: 100%;}
   }
 
   .country-back-btn {

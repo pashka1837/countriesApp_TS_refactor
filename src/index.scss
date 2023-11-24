@@ -6,25 +6,22 @@
   box-sizing: border-box;
   position: relative;
 }
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-.dark {
-}
 
 body {
-  --BG-body: #f2f2f2;
+  --BG-body: #ede9e9;
   --BG-cards: #ffffff;
   --text-color: #111517;
-
   font-family: "Nunito Sans", sans-serif;
   font-size: 1rem;
   background-color: var(--BG-body);
   color: var(--text-color);
-  /* height: 90dvh; */
 }
 
 body.dark {
@@ -52,7 +49,6 @@ body.dark {
 .loader {
   display: grid;
   place-items: center;
-  /* width: 100vw; */
   height: 90dvh;
   background-color: var(--BG-body);
 }

@@ -1,6 +1,6 @@
 import {Outlet, useNavigation} from 'react-router-dom';
-import {IonSpinner} from '@ionic/react';
 import Navbar from '../../components/Navbar/Navbar';
+import Loader from '../../components/Loader/Loader';
 
 export default function HomeLayout() {
 	const navigation = useNavigation();
@@ -9,11 +9,7 @@ export default function HomeLayout() {
 		<>
 			<Navbar />
 			{isLoading
-				? (
-					<div className='loader'>
-						<IonSpinner name='crescent' />
-					</div>
-				)
+				? <Loader />
 				: <Outlet />}
 		</>
 	);
